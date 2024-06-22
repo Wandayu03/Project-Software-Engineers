@@ -16,5 +16,6 @@ class Register extends Model
         'phone_num',
         'password',
         'password_confirmation',
+        'roles'
     ];
 }

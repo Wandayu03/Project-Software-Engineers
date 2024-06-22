@@ -29,8 +29,10 @@
                 <div class="subMenuWrap" id="subMenu">
                     <div class="subMenu">
                         <div class="userInfo">
-                            <img src="{{ asset('assets/images/profile/mrbean.jpg') }}" width="55" height="55">
-                            <h2>James</h2>
+                            <a href="{{ route('profile') }}">
+                                <img src="{{ asset('assets/images/profile/mrbean.jpg') }}" width="55" height="55">
+                                <h2>James</h2>
+                            </a> 
                         </div>
                         <hr>
                         <a href="#" class="subMenuLink">

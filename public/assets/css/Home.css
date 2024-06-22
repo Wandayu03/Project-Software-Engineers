@@ -326,6 +326,9 @@ header{
     margin-top: 20px;
     text-decoration: none;
     transition: all ease 0.3s;
+    border: none; 
+    outline: none; 
+    cursor: pointer;
  }
 
  .product-box .cart-btn i{

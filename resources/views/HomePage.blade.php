@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Homepage</title>
     <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;1,900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
 
     <link rel="stylesheet" href="{{ asset('assets/css/Home.css') }}">
+    <script src="{{ asset('assets/js/Cart.js') }}" defer></script>
     
 </head>
 <body>
@@ -15,12 +17,14 @@
         <header>
             <a href="{{ route('home') }}"><h2 class="logo">GarageGems</h2></a>
             <div class="search-bar">
-                <i class="fa fa-search" ></i>
-                <input type="search" placeholder="Find at GarageGems" >
+                <i class="fa fa-search"></i>
+                <input type="search" id="searchInput" placeholder="Find at GarageGems">
+                <button onclick="searchProducts()">Search</button>
             </div>
+
             <nav class="navigation">
-                <a href="{{ route('cart') }}" ><i class="fa-solid fa-cart-shopping" style="font-size: 1.5em"></i></a> 
-                <a href="Message.html"><i class="fa-solid fa-message" style="font-size: 1.5em"></i></a>
+                <a href="{{ route('showCart') }}" ><i class="fa-solid fa-cart-shopping" style="font-size: 1.5em"></i></a> 
+                <a href="{{ route('message') }}"><i class="fa-solid fa-message" style="font-size: 1.5em"></i></a>
                 <a href="{{ route('profile') }}"><i class="fa-solid fa-user" style="font-size: 1.5em"></i></a>
             </nav>
         </header>
@@ -110,110 +114,33 @@
     </section>
 
     
-<section id="popular-product">
-    <div class="product-heading">
-        <h3>Popular Product</h3>
-        <span>All</span>
-    </div>
-
-    <div class="product-container">
-        <div class="product-box">
-            <a href="{{ route('descpro2') }}">
-                <img src="{{ asset('assets/images/rotan.png') }}" alt="rotan">
-            </a>
-            <strong>Kursi Rotan</strong>
-            <span class="quantity">1 Pcs</span>
-            <span class="price">Rp 500.000</span>
-            <a href="#" class="cart-btn">
-                <i class="fas fa-shopping-bag"></i>  Add To Cart
-            </a>
-
-            <a href="#" class="like-btn">
-                <i class="far fa-heart"></i>
-            </a>
+    <section id="popular-product">
+        <div class="product-heading">
+            <h3>Popular Product</h3>
+            <span>All</span>
         </div>
 
-        <div class="product-box">
-            <a href="{{ route('descpro3') }}">
-                <img src="{{ asset('assets/images/sepatu.png') }}" alt="rotan">
-            </a>
-            <strong>Sepatu Converse</strong>
-            <span class="quantity">1 Pcs</span>
-            <span class="price">Rp 950.000</span>
-            <a href="#" class="cart-btn">
-                <i class="fas fa-shopping-bag"></i>  Add To Cart
-            </a>
+        <div class="product-container">
+            @foreach ($products as $product)
+                <div class="product-box">
+                    <a href="{{ route('descpro', ['id' => $product->id]) }}">
+                        <img src="{{ asset('storage/' . $product->photo) }}" alt="{{ $product->product }}">
+                        <!-- <img class="des1" src="{{ asset('storage/' . $product->photo) }}" alt="{{ $product->product }}" width="500px"> -->
+                    </a>
+                    <strong>{{ $product->product }}</strong>
+                    <span class="quantity">{{ $product->quantity }} Pcs</span>
+                    <span class="price">Rp {{ number_format($product->price, 0, ',', '.') }}</span>
+                    <button class="cart-btn" onclick="addToCart({{ $product->id }})">
+                        <i class="fas fa-shopping-bag"></i> Add To Cart
+                    </button>
 
-            <a href="#" class="like-btn">
-                <i class="far fa-heart"></i>
-            </a>
+                    <a href="#" class="like-btn">
+                        <i class="far fa-heart"></i>
+                    </a>
+                </div>
+            @endforeach
         </div>
-
-        <div class="product-box">
-            <a href="{{ route('descpro4') }}">
-                <img src="{{ asset('assets/images/sofa.png') }}" alt="rotan">
-            </a>
-            <strong>Sofa</strong>
-            <span class="quantity">1 Pcs</span>
-            <span class="price">FREE</span>
-            <a href="#" class="cart-btn">
-                <i class="fas fa-shopping-bag"></i>  Add To Cart
-            </a>
-
-            <a href="#" class="like-btn">
-                <i class="far fa-heart"></i>
-            </a>
-        </div>
-
-        <div class="product-box">
-            <a href="{{ route('descpro5') }}">
-                <img src="{{ asset('assets/images/pot.png') }}" alt="rotan">
-            </a>
-            <strong>Pot bunga</strong>
-            <span class="quantity">1 Pcs</span>
-            <span class="price">Rp 20.000</span>
-            <a href="#" class="cart-btn">
-                <i class="fas fa-shopping-bag"></i>  Add To Cart
-            </a>
-
-            <a href="#" class="like-btn">
-                <i class="far fa-heart"></i>
-            </a>
-        </div>
-
-        <div class="product-box">
-            <a href="{{ route('descpro1') }}">
-                <img src="{{ asset('assets/images/celana.png') }}" alt="rotan">
-            </a>
-            <strong>Celana panjang</strong>
-            <span class="quantity">1 Pcs</span>
-            <span class="price">Rp 100.000</span>
-            <a href="#" class="cart-btn">
-                <i class="fas fa-shopping-bag"></i>  Add To Cart
-            </a>
-
-            <a href="#" class="like-btn">
-                <i class="far fa-heart"></i>
-            </a>
-        </div>
-
-        <div class="product-box">
-            <a href="{{ route('descpro6') }}">
-                <img src="{{ asset('assets/images/pupuk.png') }}" alt="rotan">
-            </a>
-            <strong>Pupuk Pak tani</strong>
-            <span class="quantity">1 KG</span>
-            <span class="price">Rp 70.000</span>
-            <a href="#" class="cart-btn">
-                <i class="fas fa-shopping-bag"></i>  Add To Cart
-            </a>
-
-            <a href="#" class="like-btn">
-                <i class="far fa-heart"></i>
-            </a>
-        </div>
-    </div>
-</section>
+    </section>
     
 <footer>
     <div class="footer-container">
@@ -230,10 +157,10 @@
         <div class="footer-links">
             <strong>Product</strong>
             <ul>
-                <li><a href="#">Clothes</a></li>
-                <li><a href="#">Popular</a></li>
-                <li><a href="#">New</a></li>
-                <li><a href="#">Packages</a></li>
+                <li><a href="{{ route('home') }}">Clothes</a></li>
+                <li><a href="{{ route('home') }}">Popular</a></li>
+                <li><a href="{{ route('home') }}">New</a></li>
+                <li><a href="{{ route('home') }}">Packages</a></li>
             </ul>
         </div>
 
